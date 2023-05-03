@@ -23,6 +23,7 @@ RUN     dnf -y --refresh install            \
         sudo.x86_64                         \
         systemd-devel                       \
         tcsh.x86_64                         \
+        xz.x86_64                           \
         wget.x86_64                         \
     && dnf clean all -y
 
@@ -33,7 +34,7 @@ RUN python3 -m pip install --upgrade pip \
 
 RUN cd /tmp \
     && curl -sSL "https://github.com/Snaipe/Criterion/releases/download/v2.4.1/criterion-2.4.1-linux-x86_64.tar.xz" -o /tmp/criterion-2.4.1.tar.xz \
-    && tar xf criterion-2.4.1.tar.xz \
+    && tar xf /tmp/criterion-2.4.1.tar.xz \
     && cp -r /tmp/criterion-2.4.1/* /usr/local/ \
     && echo "/usr/local/lib" > /etc/ld.so.conf.d/usr-local.conf \
     && ldconfig
