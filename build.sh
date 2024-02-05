@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if ! id -nG "$USER" | grep -qw "docker"; then
+if [ "$EUID" -ne 0 ] && ! id -nG "$USER" | grep -qw "docker"; then
     echo "[ERROR] : You ($USER) must be in the docker group."
     echo "          Here's the command :"
     echo "          sudo usermod -a -G docker $USER"

@@ -18,6 +18,7 @@ RUN     dnf -y --refresh install            \
         ncurses-devel.x86_64                \
         ncurses-libs                        \
         ncurses.x86_64                      \
+        nasm.x86_64                      \
         python3.x86_64                      \
         python3-devel.x86_64                \
         sudo.x86_64                         \
