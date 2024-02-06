@@ -9,7 +9,8 @@ if [ "$EUID" -ne 0 ] && ! id -nG "$USER" | grep -qw "docker"; then
 fi
 
 docker pull fedora:36
-docker build -t thomas-pommier-epi/epitest-fast:devel .
+docker build -t thomas-pommier-epi/epitest-fast:latest .
+docker build -t thomas-pommier-epi/epitest-fast-cpp:latest . -f cppDockerfile
 
 if [[ $? -eq 0 ]]; then
     echo "Done building."

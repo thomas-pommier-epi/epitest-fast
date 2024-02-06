@@ -1,6 +1,6 @@
 FROM fedora:36
 
-# Notice : This is mainly for C programs (non graphic).
+# Notice : This is mainly for C++ programs (non graphic).
 
 RUN     dnf -y --refresh install            \
         --setopt=tsflags=nodocs             \
@@ -10,6 +10,7 @@ RUN     dnf -y --refresh install            \
         curl.x86_64                         \
         elfutils-libelf-devel.x86_64        \
         gcc.x86_64                          \
+        gcc-c++.x86_64                      \
         glibc-devel.x86_64                  \
         glibc-locale-source.x86_64          \
         glibc.x86_64                        \
@@ -18,12 +19,10 @@ RUN     dnf -y --refresh install            \
         ncurses-devel.x86_64                \
         ncurses-libs                        \
         ncurses.x86_64                      \
-        nasm.x86_64                         \
         python3.x86_64                      \
         python3-devel.x86_64                \
         sudo.x86_64                         \
         systemd-devel                       \
-        tcsh.x86_64                         \
         xz.x86_64                           \
         wget.x86_64                         \
     && dnf clean all -y
