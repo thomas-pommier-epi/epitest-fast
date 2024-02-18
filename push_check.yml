@@ -1,0 +1,47 @@
+name: push-checker
+
+on:
+  push:
+    branches-ignore:
+      - "ga-ignore-*"
+  pull_request:
+    branches-ignore:
+      - "ga-ignore-*"
+
+env:
+  EXECUTABLES: "binary"
+  ARGUMENTS: ""
+  BIN_NAME: # TODO : change to your binary name
+
+jobs:
+  check_compilation:
+    name: Check compilation & unit tests
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/thomas-pommier-epi/epitest-fast:latest # TODO : change the package version tag depending on your project
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checking Makefile compilation.
+        run: |
+          make
+          if [ $? -ne 0 ]; then
+            echo "Make failed."
+            exit 1
+          fi
+          if [ -ne "./${{ env.BIN_NAME }}" ]; then
+            echo "Bin not found."
+            exit 1
+          fi
+        timeout-minutes: 2
+
+      - name: Running unit tests.
+        run: |
+          make clean
+          make tests_run
+          if [ $? -ne 0 ]; then
+            echo "Make failed."
+            exit 1
+          fi
