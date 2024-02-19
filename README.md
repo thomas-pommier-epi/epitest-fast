@@ -1,5 +1,4 @@
 # LIGHTWEIGHT TEST CONTAINERS FOR EPITECH PROJECTS
----
  Docker containers are for your Epitech projects, allowing you to test your program via GitHub Actions. The original `epitest-docker` image is very slow during the workflow setup due to its large number of unnecessary dependencies.
 
 The repository contains multiple package versions you can download:

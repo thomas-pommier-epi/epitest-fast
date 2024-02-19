@@ -9,17 +9,18 @@ RUN     $install                            \
         make.x86_64                         \
         python3.x86_64                      \
         python3-devel.x86_64                \
-        xz.x86_64
+        xz.x86_64 && dnf clean all -y
 
 # Gcovr for unit tests
-RUN python3 -m pip install --upgrade pip \
-    && python3 -m pip install -Iv gcovr==5.2 \
+RUN python3 -m pip install --upgrade pip --no-cache-dir \
+    && python3 -m pip install -Iv gcovr==5.2 --no-cache-dir \
     && localedef -i en_US -f UTF-8 en_US.UTF-8
 
 # Criterion
 RUN cd /tmp \
     && curl -sSL "https://github.com/Snaipe/Criterion/releases/download/v2.4.1/criterion-2.4.1-linux-x86_64.tar.xz" -o /tmp/criterion-2.4.1.tar.xz \
     && tar xf /tmp/criterion-2.4.1.tar.xz \
+    && rm -f /tmp/criterion-2.4.1.tar.xz \
     && cp -r /tmp/criterion-2.4.1/* /usr/local/ \
     && echo "/usr/local/lib" > /etc/ld.so.conf.d/usr-local.conf \
     && ldconfig
@@ -34,20 +35,20 @@ RUN if [[ -n "$c" ]]; then                  \
         ncurses-libs                        \
         ncurses.x86_64                      \
         tcsh.x86_64;                        \
-        fi
+        dnf clean all -y; fi
 
 ARG cgraphic
 RUN if [[ -n "$cgraphic" ]]; then           \
         $install                            \
         CSFML.x86_64                        \
         CSFML-devel.x86_64;                 \
-        fi
+        dnf clean all -y; fi
 
 ARG cpp
 RUN if [[ -n "$cpp" ]]; then                \
         $install                            \
         gcc-c++.x86_64;                     \
-        fi
+        dnf clean all -y; fi
 
 ARG cppgraphic
 RUN if [[ -n "$cppgraphic" ]]; then         \
@@ -67,13 +68,13 @@ RUN if [[ -n "$cppgraphic" ]]; then         \
         libcaca-devel.x86_64                \
         SFML.x86_64                         \
         SFML-devel.x86_64;                  \
-        fi
+        dnf clean all -y; fi
 
 ARG asm
 RUN if [[ -n "$asm" ]]; then                \
         $install                            \
         nasm.x86_64;                        \
-        fi
+        dnf clean all -y; fi
 
 ARG haskell
 RUN if [[ -n "$haskell" ]]; then                            \
@@ -81,10 +82,7 @@ RUN if [[ -n "$haskell" ]]; then                            \
         ghc                                                 \
         && cd /tmp                                          \
         && curl -sSL https://get.haskellstack.org/ | sh;    \
-        fi
-
-# make the container's size smaller by removing cache
-RUN dnf clean all -y
+        dnf clean all -y; fi
 
 ENV LANG=en_US.utf8 LANGUAGE=en_US:en LC_ALL=en_US.utf8 PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
