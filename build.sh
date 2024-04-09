@@ -54,9 +54,4 @@ docker build --build-arg asm=y -t thomas-pommier-epi/epitest-fast:asm .
 confirm "Do you want to build 'Haskell (without C libs)' ? :" && \
 docker build --build-arg haskell=y --build-arg c='' -t thomas-pommier-epi/epitest-fast:haskell .
 
-if [[ $? -eq 0 ]]; then
-    echo "Done building."
-else
-    echo "Failed to build docker image."
-    exit 1
-fi
+echo "Done building."

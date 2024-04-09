@@ -3,6 +3,7 @@ FROM fedora:38
 ENV install='dnf -y --refresh install --setopt=tsflags=nodocs --setopt=deltarpm=false'
 RUN     $install                            \
         curl.x86_64                         \
+        diffutils.x86_64                    \
         elfutils-libelf-devel.x86_64        \
         glibc-locale-source.x86_64          \
         langpacks-en                        \
@@ -31,6 +32,7 @@ RUN if [[ -n "$c" ]]; then                  \
         gcc.x86_64                          \
         glibc-devel.x86_64                  \
         glibc.x86_64                        \
+        libuuid-devel.x86_64                \
         ncurses-devel.x86_64                \
         ncurses-libs                        \
         ncurses.x86_64                      \
@@ -76,13 +78,20 @@ RUN if [[ -n "$asm" ]]; then                \
         nasm.x86_64;                        \
         dnf clean all -y; fi
 
+# The installation is kinf of hacky, just want stack to download the specific ghc for that resolver version.
+# stack build will fail, however the correct ghc version is installed.
 ARG haskell
+ENV STACK_RESOLVER="lts-20.11"
 RUN if [[ -n "$haskell" ]]; then                            \
-        $install                                            \
-        ghc                                                 \
+        $install stack                                      \
         && cd /tmp                                          \
-        && curl -sSL https://get.haskellstack.org/ | sh;    \
-        dnf clean all -y; fi
+        && mkdir stack                                      \
+        && cd stack                                         \
+        && stack init --resolver $STACK_RESOLVER            \
+        && stack build                                      \
+        ; cd ..                                             \
+        && rm -rf stack                                     \
+        && dnf clean all -y; fi
 
 ENV LANG=en_US.utf8 LANGUAGE=en_US:en LC_ALL=en_US.utf8 PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
 
